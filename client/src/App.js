@@ -5,6 +5,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import Dashboard from './pages/Dashboard';
+import AddUser from './pages/AddUser';
 import Login from './pages/Login';
 import './styles/global.css';
 
@@ -24,6 +25,7 @@ function App() {
               <TopBar setIsSidebar={setIsSidebar} />
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/add-user" element={<AddUser />} />
               </Routes>
             </main>
           </>
