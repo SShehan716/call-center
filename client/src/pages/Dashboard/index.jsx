@@ -6,12 +6,7 @@ const DashboardPage = () => {
     <Grid container spacing={2}>
       <Grid item xs={6}>
         <Card>
-          <Typography variant="h5">Card 1</Typography>
-        </Card>
-      </Grid>
-      <Grid item xs={6}>
-        <Card>
-          <Typography variant="h5">Card 2</Typography>
+          <Typography variant="h5">Dashboard</Typography>
         </Card>
       </Grid>
     </Grid>
