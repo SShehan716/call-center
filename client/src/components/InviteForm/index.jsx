@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Select, MenuItem } from '@mui/material';
+import { Box, TextField, Button, MenuItem } from '@mui/material';
 
 const InviteForm = () => {
 
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
 
     return (
@@ -41,6 +42,17 @@ const InviteForm = () => {
                 sx={{ my: 2 }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                sx={{ my: 2 }}
+                value={password}
+                autoComplete='new-password'
+                onChange={(e) => setPassword(e.target.value)}
             />
 
             <Button

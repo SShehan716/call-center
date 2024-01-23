@@ -8,6 +8,8 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -147,6 +149,26 @@ const SideBar = () => {
                             setSelected={setSelected}
                         />
                     </Box>
+                    <MenuItem
+                        style={{
+                            color: colors.grey[100],
+                            cursor: "pointer",
+                            marginBottom: "10px",
+                            bottom: "0",
+                            position: "absolute",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                        onClick={() => {
+                            console.log('logout')
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <ExitToAppOutlinedIcon fontSize="small" style={{ marginRight: '5px' }} />
+                            <Typography>Logout</Typography>
+                        </Box>
+                    </MenuItem>
                 </Menu>
             </ProSidebar>
         </Box>

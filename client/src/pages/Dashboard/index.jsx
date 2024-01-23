@@ -1,15 +1,12 @@
 import React from 'react'
-import { Grid, Card, Typography } from '@mui/material'
+import { Box } from '@mui/material'
+import Header from '../../components/Header'
 
 const DashboardPage = () => {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={6}>
-        <Card>
-          <Typography variant="h5">Dashboard</Typography>
-        </Card>
-      </Grid>
-    </Grid>
+    <Box m="20px">
+      <Header title="Dashboard" />
+    </Box>
   )
 }
 

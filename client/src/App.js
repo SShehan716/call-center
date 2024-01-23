@@ -7,6 +7,7 @@ import SideBar from './components/SideBar';
 import Dashboard from './pages/Dashboard';
 import AddUser from './pages/AddUser';
 import Login from './pages/Login';
+import UploadData from './pages/UploadData';
 import './styles/global.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/add-user" element={<AddUser />} />
+                <Route path="/upload-data" element={<UploadData />} />
               </Routes>
             </main>
           </>
