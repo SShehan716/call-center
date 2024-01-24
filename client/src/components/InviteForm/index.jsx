@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, MenuItem } from '@mui/material';
 
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { convertLength } from '@mui/material/styles/cssUtils';
+
 const InviteForm = () => {
 
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const createUser = async (e) => {
+        const response = await createUserWithEmailAndPassword(auth, "sachin@gmail.com", "password");
+        console.log("response", response);
+    };
 
 
     return (
@@ -61,6 +70,7 @@ const InviteForm = () => {
                 color="secondary"
                 fullWidth
                 sx={{ width: '20%' }}
+                onClick={createUser}
             >
                 Invite
             </Button>
