@@ -1,21 +1,119 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, MenuItem } from '@mui/material';
 
+//mui imports
+import { Box, TextField, Button, MenuItem, Snackbar } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
+
+//emailjs imports
+import emailjs from 'emailjs-com';
+
+//firebase imports
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore  } from '../../firebase';
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { convertLength } from '@mui/material/styles/cssUtils';
+import { auth, db } from '../../firebase';
+import { doc, setDoc } from "firebase/firestore";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const InviteForm = () => {
 
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [emailInUseError, setEmailInUseError] = useState('');
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+
+    //email validation
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+        return emailRegex.test(email);
+    };
+
+    const validateEmailOnBlur = () => {
+        if (email && !validateEmail(email)) {
+            setEmailError('Please enter a valid email address');
+        } else {
+            setEmailError('');
+        }
+    };
+
+    // form validation
+    const isFormValid = () => {
+        return name.trim() !== '' && role.trim() !== '' && email.trim() !== '' && !emailError;
+    };
+
+    //generate password
+    const generateStrongPassword = () => {
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const numbers = '0123456789';
+        const symbols = '!@#$%^&*()_+{}[]|;:,.<>?';
+
+        const allChars = uppercase + lowercase + numbers + symbols;
+        let newPassword = '';
+
+        for (let i = 0; i < 12; i++) {
+            const randomIndex = Math.floor(Math.random() * allChars.length);
+            newPassword += allChars[randomIndex];
+        }
+
+        return newPassword;
+    };
+
+    //reset form
+    const resetForm = () => {
+        setName('');
+        setRole('');
+        setEmail('');
+    };
+
+    // open alert box
+    const showSuccessSnackbar = () => {
+        setOpenSnackbar(true);
+    };
+
+    //close alert box
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackbar(false);
+    };
 
     const createUser = async (e) => {
-        const response = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("response", response);
+        try {
+
+            const password = generateStrongPassword();
+
+            const userAuth = await createUserWithEmailAndPassword(auth, email, password);
+            await setDoc(doc(db, "users", userAuth.user.uid), {
+                name: name,
+                role: role,
+                email: email,
+            });
+
+            // Send an invitation email
+            await emailjs.send("service_xmrcvh5","template_7ddpq88",{
+                name : name,
+                email : email,
+                password : password,
+                role : role
+            }, "HZcc1JRXplnGjrMLi");
+
+            //show alert box
+            showSuccessSnackbar();
+
+            //reset form
+            resetForm();
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                setEmailInUseError('This email address is already in use!');
+            }
+            console.log(error);
+        }
     };
 
 
@@ -40,8 +138,8 @@ const InviteForm = () => {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
             >
-                <MenuItem value="Intern">Admin</MenuItem>
-                <MenuItem value="Admin">User</MenuItem>
+                <MenuItem value="Admin">Admin</MenuItem>
+                <MenuItem value="User">User</MenuItem>
             </TextField>
 
             <TextField
@@ -52,17 +150,9 @@ const InviteForm = () => {
                 sx={{ my: 2 }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                sx={{ my: 2 }}
-                value={password}
-                autoComplete='new-password'
-                onChange={(e) => setPassword(e.target.value)}
+                onBlur={validateEmailOnBlur}
+                error={Boolean(emailError || emailInUseError)}
+                helperText={emailError || emailInUseError}
             />
 
             <Button
@@ -72,9 +162,22 @@ const InviteForm = () => {
                 fullWidth
                 sx={{ width: '20%' }}
                 onClick={createUser}
+                disabled={!isFormValid()}
             >
                 Invite
             </Button>
+
+            {/* Snackbar for successfully invited notifications */}
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackbar}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="success">
+                    User successfully invited!
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
