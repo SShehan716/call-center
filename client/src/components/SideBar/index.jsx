@@ -149,26 +149,25 @@ const SideBar = () => {
                             setSelected={setSelected}
                         />
                     </Box>
-                    <MenuItem
+                    <Box paddingLeft={isCollapsed ? undefined : "10%"}
                         style={{
-                            color: colors.grey[100],
-                            cursor: "pointer",
                             marginBottom: "10px",
                             bottom: "0",
                             position: "absolute",
                             display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                        onClick={() => {
-                            console.log('logout')
-                        }}
-                    >
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <ExitToAppOutlinedIcon fontSize="small" style={{ marginRight: '5px' }} />
-                            <Typography>Logout</Typography>
-                        </Box>
-                    </MenuItem>
+                        }}>
+                        {!isCollapsed && (
+                            <Item
+                                title="Logout"
+                                icon={<ExitToAppOutlinedIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                                onClick={() => {
+                                    console.log('logout');
+                                }}
+                            />
+                        )}
+                    </Box>
                 </Menu>
             </ProSidebar>
         </Box>
