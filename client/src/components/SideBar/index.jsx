@@ -9,7 +9,10 @@ import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
-
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../../firebase";
+import { logoutUser } from "../../features/userSlice";
+import { signOut } from "firebase/auth";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -29,11 +32,20 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     );
 };
 
+
 const SideBar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
+
+    const user = useSelector(state => state.data.user.user)
+    const dispatch = useDispatch();
+    const handleLogout =  async (e) => {
+        console.log("logout");
+        dispatch(logoutUser());
+        signOut(auth);
+    };
 
     return (
         <Box
@@ -101,7 +113,7 @@ const SideBar = () => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Ed Roh
+                                    {user?.name}
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
                                     VP Fancy Admin
@@ -155,16 +167,14 @@ const SideBar = () => {
                             bottom: "0",
                             position: "absolute",
                             display: "flex",
-                        }}>
+                        }}
+                        onClick={handleLogout}>
                         {!isCollapsed && (
                             <Item
                                 title="Logout"
                                 icon={<ExitToAppOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                                onClick={() => {
-                                    console.log('logout');
-                                }}
                             />
                         )}
                     </Box>

@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="left-content">
-        <Typography variant="h1" color="secondary" fontWeight="bold">Welcome to the app!</Typography>
+        <Typography variant="h1" color="secondary" fontWeight="bold" align='left' ml={12}>Welcome to the Call Center Web app!</Typography>
       </div>
       <div className="right-content">
         <main>
