@@ -12,7 +12,7 @@ import "./styles/global.css";
 import { auth } from "./firebase";
 
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser, setLoading } from "./features/userSlice";
+import { loginUser, setLoading, fetchUserData } from "./features/userSlice";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -29,6 +29,7 @@ function App() {
             email: authUser.email,
           })
         );
+        dispatch(fetchUserData(authUser.uid));
         dispatch(setLoading(false));
       } else {
         console.log("user not logged in");
@@ -49,8 +50,8 @@ function App() {
             {user ? <TopBar />: null}
             <Routes>
               <Route path="/" element={user ? <Dashboard /> : <Login />} />
-              <Route path="/add-user" element={<AddUser />} />
-              <Route path="/upload-data" element={<UploadData />} />
+              <Route path="/add-user" element={user ? <AddUser /> : null} />
+              <Route path="/upload-data" element={user ? <UploadData /> : null} />
             </Routes>
           </main>
         </div>

@@ -11,6 +11,14 @@ html, body, #root, .App, .content {
   position: relative;
 }
 
+
+.css-1k6w4vv-MuiAvatar-root {
+  width: 100px !important;
+  height: 100px !important;
+  margin: 0 auto;
+  font-size: 40px !important;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

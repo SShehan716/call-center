@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
@@ -98,13 +98,14 @@ const SideBar = () => {
                     {!isCollapsed && (
                         <Box mb="25px">
                             <Box display="flex" justifyContent="center" alignItems="center">
-                                <img
+                                {/* <img
                                     alt="profile-user"
                                     width="100px"
                                     height="100px"
                                     src={`https://gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50`}
                                     style={{ cursor: "pointer", borderRadius: "50%" }}
-                                />
+                                /> */}
+                                <Avatar>{user.name ? user.name.charAt(0).toUpperCase() : "S"}</Avatar>
                             </Box>
                             <Box textAlign="center">
                                 <Typography
@@ -116,7 +117,7 @@ const SideBar = () => {
                                     {user?.name}
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    VP Fancy Admin
+                                    {user?.role?.toUpperCase() || "ADMIN"}
                                 </Typography>
                             </Box>
                         </Box>
@@ -125,7 +126,7 @@ const SideBar = () => {
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
                         <Item
                             title="Dashboard"
-                            to="/dashboard"
+                            to="/"
                             icon={<HomeOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

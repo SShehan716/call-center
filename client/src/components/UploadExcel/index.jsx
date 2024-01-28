@@ -44,8 +44,8 @@ const UploadExcel = () => {
     });
   };
 
-  //render checkbox list
-  const renderCheckboxList = () => {
+  //render column checkbox list
+  const renderColumnCheckboxList = () => {
     return allColumns.map((column) => (
       <FormControlLabel
         key={column}
@@ -64,10 +64,12 @@ const UploadExcel = () => {
           />
         }
         label={column}
-        sx={{ mb: 1, mt: 0, ml: 1, color: 'text.primary'}}
+        sx={{ mb: 1, mt: 0, ml: 1, color: 'text.primary' }}
       />
     ));
   };
+
+  //render userNames checkbox list
 
   //generate selected json data
   const generateSelectedJson = () => {
@@ -88,23 +90,27 @@ const UploadExcel = () => {
       {jsonData ? (
         <div>
           <div>
-            <Typography variant="h3" mt={3} mb={2}>
-              Select Columns:
+            <div>
+              <Typography variant="h3" mt={3} mb={2}>
+                Select Columns:
+              </Typography>
+              <Typography variant="h5" mt={3} mb={2}>
+                {renderColumnCheckboxList()}
+              </Typography>
+
+            </div>
+            <Button variant="contained" color="secondary" onClick={generateSelectedJson}>Add Columns</Button>
+          </div>
+          <div>
+            <Typography variant='h3' mt={3} mb={2}>
+              All User Names:
             </Typography>
-            <Typography variant="h5" mt={3} mb={2}>
-                {renderCheckboxList()}
+            <Typography variant='h5' mt={3} mb={2}>
+
             </Typography>
 
           </div>
-          <Button variant="contained" color="secondary" onClick={generateSelectedJson}>Add Columns</Button>
 
-          {/* remove this div after development */}
-          {/* <div>
-            <Typography variant="h6" mt={3} mb={2}>
-              JSON Output:
-            </Typography>
-            <pre>{JSON.stringify(selectedJson, null, 2)}</pre>
-          </div> */}
         </div>
       ) : (
         <div>
