@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
@@ -8,6 +8,11 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../../firebase";
+import { logoutUser } from "../../features/userSlice";
+import { signOut } from "firebase/auth";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -27,11 +32,20 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     );
 };
 
+
 const SideBar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
+
+    const user = useSelector(state => state.data.user.user)
+    const dispatch = useDispatch();
+    const handleLogout =  async (e) => {
+        console.log("logout");
+        dispatch(logoutUser());
+        signOut(auth);
+    };
 
     return (
         <Box
@@ -84,13 +98,14 @@ const SideBar = () => {
                     {!isCollapsed && (
                         <Box mb="25px">
                             <Box display="flex" justifyContent="center" alignItems="center">
-                                <img
+                                {/* <img
                                     alt="profile-user"
                                     width="100px"
                                     height="100px"
                                     src={`https://gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50`}
                                     style={{ cursor: "pointer", borderRadius: "50%" }}
-                                />
+                                /> */}
+                                <Avatar>{user.name ? user.name.charAt(0).toUpperCase() : "S"}</Avatar>
                             </Box>
                             <Box textAlign="center">
                                 <Typography
@@ -99,10 +114,10 @@ const SideBar = () => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Ed Roh
+                                    {user?.name}
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    VP Fancy Admin
+                                    {user?.role?.toUpperCase() || "ADMIN"}
                                 </Typography>
                             </Box>
                         </Box>
@@ -126,7 +141,7 @@ const SideBar = () => {
                         </Typography>
                         <Item
                             title="Upload Data"
-                            to="/contacts"
+                            to="/upload-data"
                             icon={<ContactsOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -141,11 +156,28 @@ const SideBar = () => {
                         </Typography>
                         <Item
                             title="Add User"
-                            to="/form"
+                            to="/add-user"
                             icon={<PersonOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
+                    </Box>
+                    <Box paddingLeft={isCollapsed ? undefined : "10%"}
+                        style={{
+                            marginBottom: "10px",
+                            bottom: "0",
+                            position: "absolute",
+                            display: "flex",
+                        }}
+                        onClick={handleLogout}>
+                        {!isCollapsed && (
+                            <Item
+                                title="Logout"
+                                icon={<ExitToAppOutlinedIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        )}
                     </Box>
                 </Menu>
             </ProSidebar>
